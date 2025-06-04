@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarjetas de Crédito en Costa Rica 2025</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f8fafc;
+        }
+        .slide {
+            display: none;
+            height: 100vh;
+            padding: 2rem;
+            background-color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow-y: auto;
+        }
+        .slide.active {
+            display: block;
+        }
+        .slide-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .progress-bar {
+            height: 6px;
+            background-color: #e2e8f0;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+        .progress {
+            height: 100%;
+            background-color: #3b82f6;
+            transition: width 0.3s ease;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #e2e8f0;
+            padding: 0.75rem;
+            text-align: left;
+        }
+        th {
+            background-color: #f1f5f9;
+        }
+        .chart {
+            width: 100%;
+            height: 300px;
+            position: relative;
+            margin: 1rem 0;
+        }
+        .chart-bar {
+            position: absolute;
+            bottom: 0;
+            width: 40px;
+            background-color: #3b82f6;
+            border-radius: 4px 4px 0 0;
+            transition: height 1s ease;
+        }
+        .chart-label {
+            position: absolute;
+            bottom: -30px;
+            text-align: center;
+            width: 60px;
+            font-size: 0.8rem;
+            transform: translateX(-10px);
+        }
+        .chart-value {
+            position: absolute;
+            bottom: 100%;
+            text-align: center;
+            width: 40px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding-top: 5px;
+        }
+        .pie-chart {
+            width: 250px;
+            height: 250px;
+            position: relative;
+            border-radius: 50%;
+            background: conic-gradient(
+                #3b82f6 0% 34%,
+                #ef4444 34% 62%,
+                #10b981 62% 74%,
+                #f59e0b 74% 87%,
+                #8b5cf6 87% 100%
+            );
+            margin: 2rem auto;
+        }
+        .pie-chart::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 100px;
+            background-color: white;
+            border-radius: 50%;
+        }
+        .pie-legend {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .pie-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .pie-legend-color {
+            width: 15px;
+            height: 15px;
+            border-radius: 3px;
+        }
+        .citation {
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-top: 0.5rem;
+        }
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: auto;
+            padding-top: 1rem;
+        }
+        button {
+            padding: 0.5rem 1rem;
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #2563eb;
+        }
+        button:disabled {
+            background-color: #cbd5e1;
+            cursor: not-allowed;
+        }
+        .slide-number {
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+         /* Estilos Premium para tarjetas */
+        .team-cards {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 25px;
+            margin-top: 40px;
+            perspective: 1000px;
+        }
+        .credit-card {
+            width: 340px;
+            height: 210px;
+            cursor: pointer;
+            transform-style: preserve-3d;
+            transition: all 0.6s ease;
+            position: relative;
+        }
+        .credit-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.8s;
+        }
+        .credit-card-front,
+        .credit-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            color: white;
+            overflow: hidden;
+        }
+        /* Frente Platinum */
+        .credit-card-front {
+            background: linear-gradient(135deg, #2c3e50, #4a6491);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        /* Reverso Platinum */
+        .credit-card-back {
+            transform: rotateY(180deg);
+            background: linear-gradient(135deg, #1a2a3a, #3a4b5c);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        /* Contenedor del logo */
+        .logo-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        /* Logo Mastercard Platinum */
+        .mastercard-logo {
+            width: 80px;
+            height: 50px;
+            background: linear-gradient(135deg, #f79e1b, #eb001b);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .mastercard-logo::before {
+            content: "";
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: #f79e1b;
+            border-radius: 50%;
+            left: 10px;
+        }
+        .mastercard-logo::after {
+            content: "";
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: #eb001b;
+            border-radius: 50%;
+            right: 10px;
+            opacity: 0.8;
+        }
+        /* Texto Banco de Costa Rica */
+        .bank-name {
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        /* Chip moderno */
+        .credit-card-chip {
+            width: 45px;
+            height: 35px;
+            background: linear-gradient(135deg, #ffd700, #c0c0c0);
+            border-radius: 6px;
+            margin: 10px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .credit-card-chip::after {
+            content: "";
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            right: 5px;
+            bottom: 5px;
+            border: 1px solid rgba(0, 0, 0, 0.3);
+            border-radius: 3px;
+        }
+        /* Números de tarjeta */
+        .credit-card-number {
+            font-family: 'Courier New', monospace;
+            font-size: 1.2rem;
+            letter-spacing: 3px;
+            margin: 10px 0;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            color: white;
+        }
+        /* Nombre y fecha */
+        .credit-card-name {
+            font-size: 1rem;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+        .credit-card-expiry {
+            font-size: 0.9rem;
+            align-self: flex-end;
+        }
+        /* Reverso: Banda magnética */
+        .credit-card-strip {
+            height: 45px;
+            background: linear-gradient(90deg, #000, #333);
+            margin: 20px -20px;
+            position: relative;
+        }
+        /* Reverso: CVV */
+        .credit-card-cvv {
+            background: white;
+            color: #000;
+            padding: 5px 15px;
+            border-radius: 4px;
+            align-self: flex-end;
+            font-family: 'Courier New', monospace;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        /* Reverso: Logo pequeño */
+        .credit-card-back-logo {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 40px;
+            background: linear-gradient(135deg, #f79e1b, #eb001b);
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        /* Efecto holográfico */
+        .holo-effect {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 30px;
+            background: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255,0.3));
+            border-radius: 4px;
+            transform: rotate(15deg);
+            opacity: 0.7;
+        }
+        /* Texto Platinum */
+        .platinum-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #e5e4e2, #b4b2b0);
+            color: #333;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body class="p-4">
+    <div class="progress-bar">
+        <div class="progress" id="progress"></div>
+    </div>
+
+    <!-- Slide 1: Portada con tarjetas interactivas -->
+    <div class="slide active" id="slide1">
+        <div class="slide-content">
+            <div class="flex flex-col items-center justify-center h-full text-center">
+                <h1 class="text-5xl font-bold text-blue-600 mb-6">Tarjetas de Crédito en Costa Rica 2025</h1>
+                <h2 class="text-2xl text-gray-700 mb-12">Tendencias, Regulaciones y Análisis Actualizado</h2>
+                <div class="w-32 h-1 bg-blue-500 mb-12"></div>
+                
+                <div class="team-cards">
+                    <!-- Tarjeta 1 - Diego -->
+                    <div class="credit-card" onclick="flipCard(this)">
+                        <div class="credit-card-inner">
+                            <div class="credit-card-front">
+                                <div class="platinum-badge">Platinum</div>
+                                <div class="holo-effect"></div>
+                                <div class="logo-container">
+                                    <span class="bank-name">Banco de Costa Rica</span>
+                                    <div class="mastercard-logo"></div>
+                                </div>
+                                <div class="credit-card-chip"></div>
+                                <div class="credit-card-number">•••• •••• •••• 2025</div>
+                                <div class="credit-card-name">Diego Bueso</div>
+                                <div class="credit-card-expiry">06/25</div>
+                            </div>
+                            <div class="credit-card-back">
+                                <div class="credit-card-strip"></div>
+                                <div class="credit-card-cvv">CVV: ***</div>
+                                <div class="credit-card-back-logo"></div>
+                                <div class="bank-name" style="position: absolute; bottom: 50px; left: 20px;">Banco de Costa Rica</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Tarjeta 2 - Angélica -->
+                    <div class="credit-card" onclick="flipCard(this)">
+                        <div class="credit-card-inner">
+                            <div class="credit-card-front">
+                                <div class="platinum-badge">Platinum</div>
+                                <div class="holo-effect"></div>
+                                <div class="logo-container">
+                                    <span class="bank-name">Banco de Costa Rica</span>
+                                    <div class="mastercard-logo"></div>
+                                </div>
+                                <div class="credit-card-chip"></div>
+                                <div class="credit-card-number">•••• •••• •••• 2025</div>
+                                <div class="credit-card-name">Angélica Espinoza</div>
+                                <div class="credit-card-expiry">06/25</div>
+                            </div>
+                            <div class="credit-card-back">
+                                <div class="credit-card-strip"></div>
+                                <div class="credit-card-cvv">CVV: ***</div>
+                                <div class="credit-card-back-logo"></div>
+                                <div class="bank-name" style="position: absolute; bottom: 50px; left: 20px;">Banco de Costa Rica</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Tarjeta 3 - Kiany -->
+                    <div class="credit-card" onclick="flipCard(this)">
+                        <div class="credit-card-inner">
+                            <div class="credit-card-front">
+                                <div class="platinum-badge">Platinum</div>
+                                <div class="holo-effect"></div>
+                                <div class="logo-container">
+                                    <span class="bank-name">Banco de Costa Rica</span>
+                                    <div class="mastercard-logo"></div>
+                                </div>
+                                <div class="credit-card-chip"></div>
+                                <div class="credit-card-number">•••• •••• •••• 2025</div>
+                                <div class="credit-card-name">Kiany Solano</div>
+                                <div class="credit-card-expiry">06/25</div>
+                            </div>
+                            <div class="credit-card-back">
+                                <div class="credit-card-strip"></div>
+                                <div class="credit-card-cvv">CVV: ***</div>
+                                <div class="credit-card-back-logo"></div>
+                                <div class="bank-name" style="position: absolute; bottom: 50px; left: 20px;">Banco de Costa Rica</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Tarjeta 4 - Kendall -->
+                    <div class="credit-card" onclick="flipCard(this)">
+                        <div class="credit-card-inner">
+                            <div class="credit-card-front">
+                                <div class="platinum-badge">Platinum</div>
+                                <div class="holo-effect"></div>
+                                <div class="logo-container">
+                                    <span class="bank-name">Banco de Costa Rica</span>
+                                    <div class="mastercard-logo"></div>
+                                </div>
+                                <div class="credit-card-chip"></div>
+                                <div class="credit-card-number">•••• •••• •••• 2025</div>
+                                <div class="credit-card-name">Kendall Valverde</div>
+                                <div class="credit-card-expiry">06/25</div>
+                            </div>
+                            <div class="credit-card-back">
+                                <div class="credit-card-strip"></div>
+                                <div class="credit-card-cvv">CVV: ***</div>
+                                <div class="credit-card-back-logo"></div>
+                                <div class="bank-name" style="position: absolute; bottom: 50px; left: 20px;">Banco de Costa Rica</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <p class="text-gray-500 mt-16">Universidad de Costa Rica</p>
+                <p class="text-gray-500">Junio 2025</p>
+            </div>
+            <div class="controls">
+                <div></div>
+                <button onclick="nextSlide()">Siguiente &rarr;</button>
+                <div class="slide-number">1/8</div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Slide 2: Introducción actualizada -->
+<div class="slide" id="slide2">
+    <div class="slide-content">
+        <h2 class="text-3xl font-bold text-blue-600 mb-6">Panorama Actual 2025</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+                <h3 class="text-xl font-semibold mb-4">Nuevas Tendencias</h3>
+                <ul class="list-disc pl-6 space-y-2 mb-6">
+                    <li>Incremento del 22% en pagos contactless desde 2023 </li>
+                    <li>Adopción de billeteras digitales en un 45% de usuarios </li>
+                    <li>Crecimiento de tarjetas sostenibles con programas de carbono neutral</li>
+                </ul>
+                
+                <div class="bg-blue-50 p-4 rounded-lg border border-blue-200 mb-4">
+                    <h4 class="font-semibold text-blue-800">SUGEF: Supervisión Financiera</h4>
+                    <p class="text-sm mt-1">La Superintendencia General de Entidades Financieras regula y supervisa las tarjetas de crédito en Costa Rica, garantizando:</p>
+                    <ul class="list-disc pl-6 mt-1 space-y-1 text-sm">
+                        <li>Transparencia en tasas de interés (TIN y TAE)</li>
+                        <li>Protección al consumidor financiero</li>
+                        <li>Cumplimiento de la Ley 7472 contra la usura</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                    <h4 class="font-semibold text-yellow-800">Crédito Revolutivo</h4>
+                    <p class="text-sm mt-1">Las tarjetas son <strong>créditos revolventes</strong>: el límite se regenera al realizar pagos, permitiendo uso continuo sin nueva aprobación.</p>
+                </div>
+            </div>
+            
+            <div>
+                <h3 class="text-xl font-semibold mb-4">Conceptos Clave</h3>
+                
+                <div class="bg-purple-50 p-4 rounded-lg border border-purple-200 mb-4">
+                    <h4 class="font-semibold text-purple-800">TIN vs TAE</h4>
+                    <div class="grid grid-cols-2 gap-2 mt-2 text-sm">
+                        <div class="bg-white p-2 rounded border">
+                            <p class="font-semibold">TIN</p>
+                            <p>Tasa Interés Nominal (antes de comisiones)</p>
+                            <p class="mt-1 text-xs">Ej: 24% anual</p>
+                        </div>
+                        <div class="bg-white p-2 rounded border">
+                            <p class="font-semibold">TAE</p>
+                            <p>Tasa Anual Equivalente (coste real incluyendo comisiones)</p>
+                            <p class="mt-1 text-xs">Ej: 28.5% anual</p>
+                        </div>
+                    </div>
+                    <p class="text-xs mt-2 text-gray-600">* La TAE es el indicador que debe comparar al elegir tarjeta</p>
+                </div>
+                
+                <div class="bg-red-50 p-4 rounded-lg border border-red-200 mb-4">
+                    <h4 class="font-semibold text-red-800">Sobregiro y Mora</h4>
+                    <ul class="list-disc pl-6 mt-2 space-y-1 text-sm">
+                        <li><strong>Sobregiro:</strong> Exceder el límite aprobado (genera comisiones del 1-3%)</li>
+                        <li><strong>Mora:</strong> No pagar mínimo antes de fecha límite (intereses + daña historial crediticio)</li>
+                        <li>Estado de mora inicia a los 30 días sin pago y se reporta a SUGEF</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-green-50 p-4 rounded-lg border border-green-200">
+                    <p class="font-semibold text-green-800">Dato Clave 2025</p>
+                    <p class="text-sm mt-1">El saldo de crédito en tarjetas alcanzó ₡1.55 billones en diciembre 2024, con morosidad en 8.9% (mejoría vs 11.2% en 2023).</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-4 bg-gray-50 p-4 rounded-lg border border-gray-200">
+            <h4 class="font-semibold mb-2">¿Cómo funciona el ciclo de crédito?</h4>
+            <div class="flex flex-wrap justify-between text-center text-sm">
+                <div class="w-1/5 px-2">
+                    <div class="bg-blue-100 rounded-full w-8 h-8 mx-auto flex items-center justify-center">1</div>
+                    <p class="mt-1">Compra</p>
+                </div>
+                <div class="w-1/5 px-2">
+                    <div class="bg-blue-100 rounded-full w-8 h-8 mx-auto flex items-center justify-center">2</div>
+                    <p class="mt-1">Fecha de corte</p>
+                </div>
+                <div class="w-1/5 px-2">
+                    <div class="bg-blue-100 rounded-full w-8 h-8 mx-auto flex items-center justify-center">3</div>
+                    <p class="mt-1">Estado de cuenta</p>
+                </div>
+                <div class="w-1/5 px-2">
+                    <div class="bg-blue-100 rounded-full w-8 h-8 mx-auto flex items-center justify-center">4</div>
+                    <p class="mt-1">Fecha límite pago</p>
+                </div>
+                <div class="w-1/5 px-2">
+                    <div class="bg-blue-100 rounded-full w-8 h-8 mx-auto flex items-center justify-center">5</div>
+                    <p class="mt-1">Nuevo ciclo</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button onclick="prevSlide()">&larr; Anterior</button>
+            <button onclick="nextSlide()">Siguiente &rarr;</button>
+            <div class="slide-number">2/8</div>
+        </div>
+    </div>
+</div>
+    <!-- Slide 3: Estadísticas actualizadas -->
+    <div class="slide" id="slide3">
+        <div class="slide-content">
+            <h2 class="text-3xl font-bold text-blue-600 mb-6">Datos Clave 2025</h2>
+            
+            <h3 class="text-xl font-semibold mb-4">Distribución Demográfica</h3>
+            <div class="overflow-x-auto mb-6">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Segmento</th>
+                            <th>Tarjetahabientes</th>
+                            <th>Deuda Promedio</th>
+                            <th>% Morosidad</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Hombres</td>
+                            <td>684,032</td>
+                            <td>₡1,380,000</td>
+                            <td>9.1%</td>
+                        </tr>
+                        <tr>
+                            <td>Mujeres</td>
+                            <td>565,172</td>
+                            <td>₡1,120,000</td>
+                            <td>7.8%</td>
+                        </tr>
+                        <tr>
+                            <td>18-35 años</td>
+                            <td>420,500</td>
+                            <td>₡780,000</td>
+                            <td>12.4%</td>
+                        </tr>
+                        <tr>
+                            <td>36-55 años</td>
+                            <td>598,700</td>
+                            <td>₡1,620,000</td>
+                            <td>8.2%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="citation">Fuente: Superintendencia General de Entidades Financieras (SUGEF), Diciembre 2024 </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6">
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">Participación por Emisor (2025)</h3>
+                    <div class="chart" id="bankChart">
+                        <div class="chart-bar" style="left: 40px; height: 0%;" data-height="46%">
+                            <div class="chart-label">BAC</div>
+                            <div class="chart-value">46%</div>
+                        </div>
+                        <div class="chart-bar" style="left: 120px; height: 0%;" data-height="22%">
+                            <div class="chart-label">BNCR</div>
+                            <div class="chart-value">22%</div>
+                        </div>
+                        <div class="chart-bar" style="left: 200px; height: 0%;" data-height="15%">
+                            <div class="chart-label">Scotiabank</div>
+                            <div class="chart-value">15%</div>
+                        </div>
+                        <div class="chart-bar" style="left: 280px; height: 0%;" data-height="10%">
+                            <div class="chart-label">Davivienda</div>
+                            <div class="chart-value">10%</div>
+                        </div>
+                        <div class="chart-bar" style="left: 360px; height: 0%;" data-height="7%">
+                            <div class="chart-label">Otros</div>
+                            <div class="chart-value">7%</div>
+                        </div>
+                    </div>
+                    <p class="citation">Fuente: SUGEF, Balanza de Comprobación 2024 </p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">Distribución por Tipo de Tarjeta</h3>
+                    <div class="pie-chart"></div>
+                    <div class="pie-legend">
+                        <div class="pie-legend-item">
+                            <div class="pie-legend-color bg-blue-500"></div>
+                            <span>Clásica (34%)</span>
+                        </div>
+                        <div class="pie-legend-item">
+                            <div class="pie-legend-color bg-red-500"></div>
+                            <span>Oro (28%)</span>
+                        </div>
+                        <div class="pie-legend-item">
+                            <div class="pie-legend-color bg-green-500"></div>
+                            <span>Platinum (12%)</span>
+                        </div>
+                        <div class="pie-legend-item">
+                            <div class="pie-legend-color bg-yellow-500"></div>
+                            <span>Premium (11%)</span>
+                        </div>
+                        <div class="pie-legend-item">
+                            <div class="pie-legend-color bg-purple-500"></div>
+                            <span>Otras (15%)</span>
+                        </div>
+                    </div>
+                    <p class="citation">Fuente: Asociación Bancaria Costarricense, 2025</p>
+                </div>
+            </div>
+            
+            <div class="controls">
+                <button onclick="prevSlide()">&larr; Anterior</button>
+                <button onclick="nextSlide()">Siguiente &rarr;</button>
+                <div class="slide-number">3/8</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: Tipos de tarjetas y regulaciones actualizadas -->
+    <div class="slide" id="slide4">
+        <div class="slide-content">
+            <h2 class="text-3xl font-bold text-blue-600 mb-6">Tipos de Tarjetas y Marco Regulatorio</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">Tipos de Tarjetas 2025</h3>
+                    <div class="overflow-x-auto">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Categoría</th>
+                                    <th>Requisitos</th>
+                                    <th>Beneficios</th>
+                                    <th>Tasa Promedio</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Visa Classic</td>
+                                    <td>Ingreso ≥ ₡400,000</td>
+                                    <td>Seguros básicos, descuentos</td>
+                                    <td>28-31%</td>
+                                </tr>
+                                <tr>
+                                    <td>Gold</td>
+                                    <td>Ingreso ≥ ₡800,000</td>
+                                    <td>Seguro de viaje, asistencia </td>
+                                    <td>25-28%</td>
+                                </tr>
+                                <tr>
+                                    <td>Platinum</td>
+                                    <td>Ingreso ≥ ₡1,800,000</td>
+                                    <td>Acceso a salas VIP, concierge</td>
+                                    <td>21-24%</td>
+                                </tr>
+                                <tr>
+                                    <td>Premium (Black/Infinite)</td>
+                                    <td>Ingreso ≥ ₡3,500,000</td>
+                                    <td>Beneficios exclusivos, prioridad </td>
+                                    <td>18-20%</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="citation">Fuente: Scotiabank, BAC, 2025 </p>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">Regulaciones Actuales</h3>
+                    <div class="bg-blue-50 p-4 rounded-lg border border-blue-200 mb-4">
+                        <p class="font-semibold">Ley 9831 de Máximas Comisiones</p>
+                        <p class="text-sm">Regula las comisiones en el sistema de tarjetas para garantizar menores costos </p>
+                    </div>
+                    
+                    <div class="bg-blue-50 p-4 rounded-lg border border-blue-200 mb-4">
+                        <p class="font-semibold">Ley 7472 Contra la Usura Crediticia</p>
+                        <p class="text-sm">Establece topes a las tasas de interés para tarjetas de crédito </p>
+                    </div>
+                    
+                    <h4 class="font-semibold mt-6 mb-2">Límites 2025</h4>
+                    <ul class="list-disc pl-6 space-y-1">
+                        <li>Tasa máxima en colones: 32.5% anual</li>
+                        <li>Tasa máxima en dólares: 26.8% anual</li>
+                        <li>Comisión por mora máxima: 1.5% adicional</li>
+                    </ul>
+                    <p class="citation">Fuente: Banco Central de Costa Rica, Tasas Máximas 2025</p>
+                </div>
+            </div>
+            
+            <div class="mt-6">
+                <h3 class="text-xl font-semibold mb-4">Derechos del Consumidor</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <h4 class="font-semibold mb-2">Derechos</h4>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li>Información clara sobre comisiones y cargos</li>
+                            <li>Transparencia en cálculo de intereses</li>
+                            <li>Protección contra fraudes </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold mb-2">Recomendaciones</h4>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li>Notificar pérdidas inmediatamente</li>
+                            <li>Verificar estados de cuenta mensuales</li>
+                            <li>Usar canales oficiales para reclamos</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="controls">
+                <button onclick="prevSlide()">&larr; Anterior</button>
+                <button onclick="nextSlide()">Siguiente &rarr;</button>
+                <div class="slide-number">4/8</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: Conceptos técnicos actualizados -->
+    <div class="slide" id="slide5">
+        <div class="slide-content">
+            <h2 class="text-3xl font-bold text-blue-600 mb-6">Gestión de Tarjetas 2025</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">Términos Clave</h3>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 mb-4">
+                        <h4 class="font-semibold text-blue-700">Fecha de Corte vs. Fecha de Pago</h4>
+                        <p class="text-sm mt-1"><strong>Fecha de corte:</strong> Finaliza el período de facturación (ej. día 15 de cada mes).</p>
+                        <p class="text-sm mt-1"><strong>Fecha de pago:</strong> Límite para pagar sin mora (ej. 15 días después del corte).</p>
+			
+
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 mb-4">
+                        <h4 class="font-semibold text-blue-700">Pago Mínimo vs. Total</h4>
+                        <p class="text-sm mt-1"><strong>Pago mínimo:</strong> Saldo + intereses + comisiones</p>
+                        <p class="text-sm mt-1"><strong>Pago total:</strong> Saldo completo para evitar intereses</p>
+			<p class="text-sm mt-1"><strong>Tasa Efectiva Anual:</strong> Pactada con la entidad financiera</p>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <h4 class="font-semibold text-blue-700">Consecuencias de Morosidad</h4>
+                        <ul class="list-disc pl-6 text-sm mt-1 space-y-1">
+                            <li>Daño al historial crediticio</li>
+                            <li>Cargos adicionales mensuales</li>
+                            <li>Posible inclusión en listas de morosos</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">Ejemplo de Estado de Cuenta 2025</h3>
+                    <div class="border border-gray-300 rounded-lg overflow-hidden">
+                        <div class="bg-blue-600 text-white p-3">
+                            <h4 class="font-semibold">BAC Credomatic</h4>
+                            <p class="text-sm">Estado de Cuenta - Tarjeta Platinum</p>
+                        </div>
+                        <div class="p-4">
+                            <div class="grid grid-cols-2 gap-2 text-sm">
+                                <div>
+                                    <p><strong>Cliente:</strong> Laura Méndez Soto</p>
+                                    <p><strong>Fecha de corte:</strong> 15/05/2025</p>
+                                </div>
+                                <div>
+                                    <p><strong>Límite:</strong> ₡2,500,000</p>
+                                    <p><strong>Fecha pago:</strong> 05/06/2025</p>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4 grid grid-cols-2 gap-4">
+                                <div class="bg-red-50 p-3 rounded border border-red-200">
+                                    <p class="text-sm font-semibold">Resumen de Movimientos</p>
+                                    <p class="text-sm">Saldo anterior: ₡920,000</p>
+                                    <p class="text-sm">+ Compras: ₡380,000</p>
+                                    <p class="text-sm">+ Intereses: ₡18,400</p>
+                                    <p class="text-sm">- Pagos: ₡250,000</p>
+                                    <p class="text-sm font-bold mt-2">= Saldo actual: ₡1,068,400</p>
+                                </div>
+                                <div class="bg-blue-50 p-3 rounded border border-blue-200">
+                                    <p class="text-sm"><strong>Pago mínimo:</strong> ₡63,920</p>
+                                    <p class="text-sm"><strong>Pago para no generar intereses:</strong> ₡1,318,400</p>
+                                    <p class="text-sm mt-2"><strong>Disponible:</strong> ₡1,431,600</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-red-50 p-4 rounded-lg border border-red-200 mb-6">
+                <h4 class="font-semibold text-red-800">Riesgo de Pagar Solo el Mínimo</h4>
+                <p class="mt-1">Si se paga solo el mínimo (₡63,920) mensualmente:</p>
+                <ul class="list-disc pl-6 mt-1 space-y-1">
+                    <li>Deuda inicial de ₡1,068,400 tardaría 7 años en liquidarse</li>
+                    <li>Intereses totales pagados: ₡1,280,000</li>
+                    <li>Costo total: 2.2 veces el saldo original</li>
+                </ul>
+            </div>
+            
+            <div class="controls">
+                <button onclick="prevSlide()">&larr; Anterior</button>
+                <button onclick="nextSlide()">Siguiente &rarr;</button>
+                <div class="slide-number">5/8</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: Errores comunes y buenas prácticas -->
+<div class="slide" id="slide6">
+    <div class="slide-content">
+        <h2 class="text-3xl font-bold text-blue-600 mb-6">Errores Comunes y Buenas Prácticas</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+                <h3 class="text-xl font-semibold mb-4">Errores más Comunes</h3>
+                
+                <div class="bg-red-50 p-4 rounded-lg border border-red-200 mb-4">
+                    <h4 class="font-semibold text-red-800">Gestión Inadecuada</h4>
+                    <ul class="list-disc pl-6 mt-2 space-y-2">
+                        <li>Pagar solo el monto mínimo cada mes</li>
+                        <li>No llevar registro detallado de gastos</li>
+                        <li>Desconocer TAE y TIN, eligiendo tarjeta inadecuada</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-red-50 p-4 rounded-lg border border-red-200">
+                    <h4 class="font-semibold text-red-800">Malos Hábitos</h4>
+                    <ul class="list-disc pl-6 mt-2 space-y-2">
+                        <li>Acumular demasiadas tarjetas → desorden financiero</li>
+                        <li>Retirar efectivo (altas comisiones + intereses)</li>
+                        <li>Exceder el 50% del límite de crédito</li>
+                    </ul>
+                </div>
+
+                <div class="bg-blue-50 p-4 rounded-lg border border-blue-200 mt-4">
+                    <h4 class="font-semibold text-blue-800">Consecuencias</h4>
+                    <ul class="list-disc pl-6 mt-2 space-y-1 text-sm">
+                        <li>Endeudamiento prolongado (hasta 7 años pagando solo el mínimo)</li>
+                        <li>Pago de intereses excesivos (hasta 2.2 veces el saldo original)</li>
+                        <li>Deterioro del historial crediticio</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div>
+                <h3 class="text-xl font-semibold mb-4">Beneficios Clave</h3>
+                
+                <div class="bg-green-50 p-4 rounded-lg border border-green-200 mb-4">
+                    <h4 class="font-semibold text-green-800">Ventajas Principales</h4>
+                    <ul class="list-disc pl-6 mt-2 space-y-2">
+                        <li>Construir historial crediticio (facilita préstamos mayores)</li>
+                        <li>Financiar pagos grandes en cuotas cómodas</li>
+                        <li>Mayor seguridad vs efectivo (bloqueo inmediato)</li>
+                        <li>Uso internacional con bajas comisiones</li>
+                    </ul>
+                </div>
+                
+                <h3 class="text-xl font-semibold mt-6 mb-4">Programas Destacados 2025</h3>
+                <div class="space-y-3">
+                    <div class="flex items-start">
+                        <div class="bg-blue-100 rounded-full w-6 h-6 flex items-center justify-center mr-2 mt-1 flex-shrink-0">
+                            <span class="text-blue-800 text-sm font-bold">1</span>
+                        </div>
+                        <div>
+                            <p class="font-semibold">BAC CashBack Premium</p>
+                            <p class="text-sm text-gray-600">5% supermercados/restaurantes/farmacias + salas VIP</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start">
+                        <div class="bg-blue-100 rounded-full w-6 h-6 flex items-center justify-center mr-2 mt-1 flex-shrink-0">
+                            <span class="text-blue-800 text-sm font-bold">2</span>
+                        </div>
+                        <div>
+                            <p class="font-semibold">BAC Blue AmEx</p>
+                            <p class="text-sm text-gray-600">5% compras internacionales/aerolíneas + seguros AmEx</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start">
+                        <div class="bg-blue-100 rounded-full w-6 h-6 flex items-center justify-center mr-2 mt-1 flex-shrink-0">
+                            <span class="text-blue-800 text-sm font-bold">3</span>
+                        </div>
+                        <div>
+                            <p class="font-semibold">LifeMiles Avianca Black</p>
+                            <p class="text-sm text-gray-600">Millas por dólar gastado + beneficios de viaje</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start">
+                        <div class="bg-blue-100 rounded-full w-6 h-6 flex items-center justify-center mr-2 mt-1 flex-shrink-0">
+                            <span class="text-blue-800 text-sm font-bold">4</span>
+                        </div>
+                        <div>
+                            <p class="font-semibold">Mastercard Black Scotiabank</p>
+                            <p class="text-sm text-gray-600">Puntos en aerolíneas, hoteles y restaurantes</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-6">
+            <h3 class="text-xl font-semibold mb-4">Buenas Prácticas</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="bg-indigo-50 p-3 rounded-lg border border-indigo-200">
+                    <p class="font-semibold text-indigo-800">💳 Selección Inteligente</p>
+                    <p class="text-sm mt-1">Elegir según límite, TAE y beneficios</p>
+                </div>
+                <div class="bg-indigo-50 p-3 rounded-lg border border-indigo-200">
+                    <p class="font-semibold text-indigo-800">⏰ Pago Oportuno</p>
+                    <p class="text-sm mt-1">Saldo total y a tiempo cada mes</p>
+                </div>
+                <div class="bg-indigo-50 p-3 rounded-lg border border-indigo-200">
+                    <p class="font-semibold text-indigo-800">📊 Control de Límite</p>
+                    <p class="text-sm mt-1">Mantener uso bajo 50% del crédito</p>
+                </div>
+                <div class="bg-indigo-50 p-3 rounded-lg border border-indigo-200">
+                    <p class="font-semibold text-indigo-800">🔢 Cantidad Ideal</p>
+                    <p class="text-sm mt-1">Máximo 2 tarjetas (principal + respaldo)</p>
+                </div>
+                <div class="bg-indigo-50 p-3 rounded-lg border border-indigo-200">
+                    <p class="font-semibold text-indigo-800">✈️ Uso Internacional</p>
+                    <p class="text-sm mt-1">Pagar en moneda local sin conversión</p>
+                </div>
+                <div class="bg-indigo-50 p-3 rounded-lg border border-indigo-200">
+                    <p class="font-semibold text-indigo-800">📱 Monitoreo Constante</p>
+                    <p class="text-sm mt-1">Verificar estados de cuenta mensuales</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button onclick="prevSlide()">&larr; Anterior</button>
+            <button onclick="nextSlide()">Siguiente &rarr;</button>
+            <div class="slide-number">6/8</div>
+        </div>
+    </div>
+</div>
+
+    <!-- Slide 7: Conclusión actualizada -->
+    <div class="slide" id="slide7">
+        <div class="slide-content">
+            <h2 class="text-3xl font-bold text-blue-600 mb-6">Conclusiones y Perspectivas</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">Hallazgos Clave 2025</h3>
+                    <ul class="list-disc pl-6 space-y-3">
+                        <li>
+                            <p class="font-semibold">Crecimiento sostenido</p>
+                            <p class="text-sm text-gray-700">3.1 millones de tarjetas en circulación (+9.6% vs 2023) </p>
+                        </li>
+                        <li>
+                            <p class="font-semibold">Reducción de brecha de género</p>
+                            <p class="text-sm text-gray-700">Diferencia hombres-mujeres disminuyó de 12% (2018) a 9.5% (2025)</p>
+                        </li>
+                        <li>
+                            <p class="font-semibold">Nuevos patrones de consumo</p>
+                            <p class="text-sm text-gray-700">15.1% más transacciones con valor promedio de ₡23,661 </p>
+                        </li>
+                        <li>
+                            <p class="font-semibold">Concentración del mercado</p>
+                            <p class="text-sm text-gray-700">BAC lidera con 46% de participación en saldos de crédito </p>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">Tendencias Futuras</h3>
+                    <div class="bg-blue-100 p-6 rounded-lg border border-blue-300 mb-6">
+                        <p class="text-xl text-center italic text-blue-800">"La tokenización y pagos contactless dominarán la evolución de las tarjetas, con enfoque en seguridad y experiencia de usuario"</p>
+                    </div>
+                    
+                    <h3 class="text-xl font-semibold mb-4">Recomendaciones Finales</h3>
+                    <div class="bg-green-50 p-4 rounded-lg border border-green-200">
+                        <ul class="list-disc pl-6 space-y-2 text-gray-700">
+                            <li>Seleccionar tarjetas alineadas con hábitos de gasto</li>
+                            <li>Pagar saldos completos para evitar intereses</li>
+                            <li>Utilizar alertas de seguridad y doble autenticación</li>
+                            <li>Revisar anualmente beneficios y costos</li>
+                            <li>Limitar uso a máximo 30% del crédito disponible</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="controls">
+                <button onclick="prevSlide()">&larr; Anterior</button>
+                <button onclick="nextSlide()">Siguiente &rarr;</button>
+                <div class="slide-number">7/8</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 8: Referencias actualizadas -->
+    <div class="slide" id="slide8">
+        <div class="slide-content">
+            <h2 class="text-3xl font-bold text-blue-600 mb-6">Referencias Bibliográficas</h2>
+            
+            <div class="space-y-4">
+                <div class="p-4 bg-gray-50 rounded-lg">
+                    <p class="mb-1">1. Banco Central de Costa Rica (2025). <em>Ley 9831 de Máximas Comisiones para el Sistema de Tarjetas</em>.</p>
+                    <p class="text-sm text-blue-600">https://www.bccr.fi.cr/en/payments-system/general-information/cards</p>
+                </div>
+                
+                <div class="p-4 bg-gray-50 rounded-lg">
+                    <p class="mb-1">2. El Financiero (2025). <em>Crecimiento del negocio de tarjetas de crédito en Costa Rica</em>.</p>
+                    <p class="text-sm text-blue-600">https://www.elfinancierocr.com/finanzas/crecimiento-del-negocio-de-tarjetas-de-credito-en/ZZASIYA5WVH57ABARSLK6BFAWM/story/</p>
+                </div>
+                
+                <div class="p-4 bg-gray-50 rounded-lg">
+                    <p class="mb-1">3. Scotiabank Costa Rica (2025). <em>Tarjetas de crédito</em>.</p>
+                    <p class="text-sm text-blue-600">https://www.scotiabankcr.com/personas/tarjetas-de-credito/default.aspx</p>
+                </div>
+                
+                <div class="p-4 bg-gray-50 rounded-lg">
+                    <p class="mb-1">4. El Financiero (2024). <em>Tarjetas de crédito premium de Costa Rica</em>.</p>
+                    <p class="text-sm text-blue-600">https://www.facebook.com/elfinancierocr/posts/conozca-las-tarjetas-de-cr%C3%A9dito-premium-de-costa-rica-en-2024-este-es-el-perfil-/1078745750947613/</p>
+                </div>
+                
+                <div class="p-4 bg-gray-50 rounded-lg">
+                    <p class="mb-1">5. La Ruta (2025). <em>Las mejores tarjetas de crédito en Costa Rica</em>.</p>
+                    <p class="text-sm text-blue-600">https://www.laruta.cr/p/las-mejores-tarjetas-de-credito-en</p>
+                </div>
+                
+                <div class="p-4 bg-gray-50 rounded-lg">
+                    <p class="mb-1">6. Visa Costa Rica (2025). <em>Visa Classic</em>.</p>
+                    <p class="text-sm text-blue-600">https://www.visa.co.cr/pague-con-visa/tarjetas/credito/visa-classic.html</p>
+                </div>
+                
+                <div class="p-4 bg-gray-50 rounded-lg">
+                    <p class="mb-1">7. Anywhere (2025). <em>Are Credit Cards Accepted in Costa Rica?</em></p>
+                    <p class="text-sm text-blue-600">https://www.anywhere.com/costa-rica/questions/money-and-budgeting/are-credit-cards-accepted</p>
+                </div>
+            </div>
+            
+            <div class="controls">
+                <button onclick="prevSlide()">&larr; Anterior</button>
+                <button onclick="nextSlide()" disabled>Siguiente &rarr;</button>
+                <div class="slide-number">8/8</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 8;
+        
+        function updateProgress() {
+            const progressPercent = (currentSlide / totalSlides) * 100;
+            document.getElementById('progress').style.width = progressPercent + '%';
+        }
+        
+        function showSlide(slideNumber) {
+            // Hide all slides
+            document.querySelectorAll('.slide').forEach(slide => {
+                slide.classList.remove('active');
+            });
+            
+            // Show the current slide
+            document.getElementById('slide' + slideNumber).classList.add('active');
+            
+            // Update progress bar
+            updateProgress();
+            
+            // Animate charts if on slide 3
+            if (slideNumber === 3) {
+                setTimeout(() => {
+                    document.querySelectorAll('#bankChart .chart-bar').forEach(bar => {
+                        bar.style.height = bar.getAttribute('data-height');
+                    });
+                }, 300);
+            }
+        }
+        
+        function nextSlide() {
+            if (currentSlide < totalSlides) {
+                currentSlide++;
+                showSlide(currentSlide);
+            }
+        }
+        
+        function prevSlide() {
+            if (currentSlide > 1) {
+                currentSlide--;
+                showSlide(currentSlide);
+            }
+        }
+	
+	// Función para voltear las tarjetas
+        function flipCard(card) {
+            card.querySelector('.credit-card-inner').style.transform = 
+                card.querySelector('.credit-card-inner').style.transform === 'rotateY(180deg)' 
+                ? 'rotateY(0deg)' 
+                : 'rotateY(180deg)';
+        }
+
+        // Efecto hover para las tarjetas
+        document.querySelectorAll('.credit-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-10px)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+            });
+        });
+
+        
+        // Handle keyboard navigation
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight') {
+                nextSlide();
+            } else if (event.key === 'ArrowLeft') {
+                prevSlide();
+            }
+        });
+        
+        // Initialize
+        updateProgress();
+    </script>
+</body>
+</html>
